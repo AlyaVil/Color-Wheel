@@ -1,0 +1,48 @@
+final static float kCircleRadius = 150.0;
+
+final static int   kNumRectangles = 60;
+final static float kRectLength = 230.0;
+final static float kRectWidth = (TWO_PI * kCircleRadius / (float)kNumRectangles);
+// final static float kRectWidth = 40.0;  // fixed width
+
+final static int   kLabelSize = 28;
+
+CircleOfRectangles circOfRect;
+color centerColor = color(255, 0, 0);
+float hue = 0.0;   // 0 - 360
+
+void setup() {
+  size(1112, 834);
+
+  float xc = width / 2.0;
+  float yc = height / 2.0;
+  circOfRect = new CircleOfRectangles(xc, yc, kCircleRadius, kNumRectangles, kRectWidth, kRectLength);
+
+  smooth();
+  colorMode(HSB, 360, 100, 100);
+  circOfRect.draw();
+}
+
+void draw() {
+  float xc = width / 2.0;
+  float yc = height / 2.0;
+  
+  // Change the hue of the center area depending on mouse position
+  if ( circOfRect.isMouseInRectangle() ) {
+    float mouseAngle = circOfRect.getMouseAngle();
+    hue = map(mouseAngle, 0.0, TWO_PI, 0.0, 360.0);
+    centerColor = color(hue, 100, 100);
+  }
+  
+  // Draw the central filled circle
+  fill(centerColor);
+  float ellipseDiameter = 2.0 * kCircleRadius - 20.0;
+  ellipse(xc, yc, ellipseDiameter, ellipseDiameter);
+  
+  // Draw the color value in the center of the circle
+  fill(kLabelSize);
+  textAlign(CENTER, CENTER);
+  textSize(kLabelSize);
+  int textPosFudge = 3;
+  text((int)hue, xc + textPosFudge, yc - textPosFudge);
+}
