@@ -1,0 +1,53 @@
+/**
+ * CircleOfRectangles
+ *
+ * This default implementation draws a spectrum of colored rectangles.
+ * It assumes that HSB mode is set like: colorMode(HSB, 360, 100, 100)
+ *
+ * Bruce Wilson, 4/26/2013
+ */
+
+class CircleOfRectangles {
+  float xCenter;
+  float yCenter;
+  float radius;
+  int   numRects;
+  float rectWidth;
+  float rectLength;
+  
+  CircleOfRectangles(float xCenter, float yCenter, float radius, int numRects, float rectWidth, float rectLength) {
+    this.xCenter = xCenter;
+    this.yCenter = yCenter;
+    this.radius = radius;
+    this.numRects = numRects;
+    this.rectWidth = rectWidth;
+    this.rectLength = rectLength;
+  }
+  
+  void draw() {
+    pushStyle();
+    stroke(80);
+    rectMode(CENTER);
+    
+    float incrAngle = TWO_PI / (float)numRects;
+    for( int i = 0; i < numRects; i++ ) {
+      pushMatrix();
+      translate(xCenter, yCenter);
+      rotate((float)i * incrAngle);
+      drawRect(i);
+      popMatrix();
+    }
+    popStyle();
+  }
+  
+  /**
+   * Draw the i-th rectangle in the circle.
+   *
+   * This method can be overridden to draw each rectangle
+   * in a different way.
+   */
+  void drawRect(int i) {
+    fill(getRectColor(i));
+    float rectX = radius + rectLength / 2.0;
+    rect(rectX, 0.0, rectLength, rectWidth);
+  }
