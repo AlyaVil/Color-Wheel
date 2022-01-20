@@ -51,3 +51,40 @@ class CircleOfRectangles {
     float rectX = radius + rectLength / 2.0;
     rect(rectX, 0.0, rectLength, rectWidth);
   }
+
+
+/*8
+   * Default color scheme: assumes HSB mode.
+   *
+   * This method can be overridden to draw each rectangle using
+   * a different color scheme.
+   */
+  color getRectColor(int i) {
+    return color(360 * (float)i / (float)numRects, 100, 100);
+  }
+  
+  boolean isMouseInRectangle() {
+    float distFromCenter = dist(xCenter, yCenter, mouseX, mouseY);
+    return ( (distFromCenter > radius) && (distFromCenter < radius + rectLength) );
+  }
+  
+  /**
+   * Return the angle (in radians) of the mouse point relative to
+   * the center of the circle.
+   */
+  float getMouseAngle() {
+    float distFromCenter = dist(xCenter, yCenter, mouseX, mouseY);
+    
+    // Using arc cosine give x and hypotenuse (dist from center)
+    float angle = acos((mouseX - xCenter) / distFromCenter);
+    
+    // Reverse the angle if it's greater than PI (upper half of the circle
+    // if drawing counterclockwise from right).
+    //
+    // This takes into account the y component of the mouse position: the
+    // arccosine function only accounts for the x component.
+    //
+    if ( (mouseY - yCenter) < 0 ) angle = TWO_PI - angle;
+    return angle;
+  }
+}
